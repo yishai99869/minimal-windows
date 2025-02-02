@@ -1,0 +1,284 @@
+<!-- הוסף אחרי סקציית התכונות -->
+<section class="gallery-section" id="gallery">
+    <div class="gallery-container">
+        <div class="gallery-item" style="background-image: url('https://picsum.photos/400/300?1')"></div>
+        <div class="gallery-item" style="background-image: url('https://picsum.photos/400/300?2')"></div>
+        <div class="gallery-item" style="background-image: url('https://picsum.photos/400/300?3')"></div>
+        <div class="gallery-item" style="background-image: url('https://picsum.photos/400/300?4')"></div>
+        <div class="gallery-item" style="background-image: url('https://picsum.photos/400/300?5')"></div>
+        <div class="gallery-item" style="background-image: url('https://picsum.photos/400/300?6')"></div>
+    </div>
+</section>
+
+<section class="contact-section" id="contact">
+    <div class="contact-form">
+        <h2>צור קשר</h2>
+        <form id="contactForm">
+            <div class="form-group">
+                <input type="text" id="name" required>
+                <label for="name">שם מלא</label>
+                <div class="underline"></div>
+            </div>
+            <div class="form-group">
+                <input type="email" id="email" required>
+                <label for="email">אימייל</label>
+                <div class="underline"></div>
+            </div>
+            <div class="form-group">
+                <textarea id="message" required></textarea>
+                <label for="message">הודעה</label>
+                <div class="underline"></div>
+            </div>
+            <button type="submit" class="cta-button">שלח הודעה</button>
+        </form>
+    </div>
+</section>
+
+<style>
+    /* עיצוב גלרייה */
+    .gallery-section {
+        padding: 4rem 2rem;
+        background: #f1f5f9;
+    }
+
+    .gallery-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .gallery-item {
+        height: 250px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .gallery-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.3);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .gallery-item:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .gallery-item:hover::before {
+        opacity: 1;
+    }
+
+    /* עיצוב טופס */
+    .contact-section {
+        padding: 5rem 2rem;
+        background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    }
+
+    .contact-form {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 2rem;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 1rem;
+        border: none;
+        background: transparent;
+        border-bottom: 2px solid #ddd;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    textarea {
+        height: 100px;
+        resize: none;
+    }
+
+    label {
+        position: absolute;
+        left: 1rem;
+        top: 1rem;
+        color: #666;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+
+    input:focus, textarea:focus {
+        outline: none;
+        border-bottom-color: var(--primary-color);
+    }
+
+    input:focus ~ label,
+    input:valid ~ label,
+    textarea:focus ~ label,
+    textarea:valid ~ label {
+        top: -1.2rem;
+        left: 0;
+        font-size: 0.8rem;
+        color: var(--primary-color);
+    }
+
+    .underline {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--primary-color);
+        transition: width 0.3s ease;
+    }
+
+    input:focus ~ .underline,
+    textarea:focus ~ .underline {
+        width: 100%;
+    }
+
+    /* Lightbox */
+    .lightbox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.9);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .lightbox.active {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .lightbox-content {
+        max-width: 90%;
+        max-height: 90%;
+        position: relative;
+    }
+
+    .lightbox-img {
+        max-width: 100%;
+        max-height: 80vh;
+        border-radius: 10px;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        color: white;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .close-btn:hover {
+        transform: rotate(90deg);
+    }
+</style>
+
+<div class="lightbox">
+    <div class="lightbox-content">
+        <span class="close-btn">&times;</span>
+        <img class="lightbox-img" src="" alt="">
+    </div>
+</div>
+
+<script>
+    // גלריית תמונות עם Lightbox
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const lightbox = document.querySelector('.lightbox');
+    const lightboxImg = document.querySelector('.lightbox-img');
+    const closeBtn = document.querySelector('.close-btn');
+
+    galleryItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const imgUrl = item.style.backgroundImage
+                .replace('url("', '')
+                .replace('")', '');
+            lightboxImg.src = imgUrl;
+            lightbox.classList.add('active');
+        });
+    });
+
+    closeBtn.addEventListener('click', () => {
+        lightbox.classList.remove('active');
+    });
+
+    lightbox.addEventListener('click', (e) => {
+        if(e.target === lightbox) {
+            lightbox.classList.remove('active');
+        }
+    });
+
+    // טופס אינטראקטיבי
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // אנימציית שליחה
+        form.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+            form.style.transform = 'scale(1)';
+        }, 200);
+
+        // הודעת הצלחה
+        const successMsg = document.createElement('div');
+        successMsg.textContent = 'הודעתך נשלחה בהצלחה!';
+        successMsg.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease-out;
+        `;
+        
+        document.body.appendChild(successMsg);
+        setTimeout(() => {
+            successMsg.remove();
+            form.reset();
+        }, 3000);
+    });
+
+    // אנימציות לטופס
+    document.querySelectorAll('.form-group input, .form-group textarea').forEach(input => {
+        input.addEventListener('focus', () => {
+            input.parentElement.querySelector('.underline').style.width = '100%';
+        });
+        
+        input.addEventListener('blur', () => {
+            if(!input.value) {
+                input.parentElement.querySelector('.underline').style.width = '0';
+            }
+        });
+    });
+</script>
